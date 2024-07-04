@@ -20,15 +20,15 @@ void Renderer::ShutDown()
 
 }
 
-bool Renderer::CreateWindow(string title, int width, int height)
+bool Renderer::CreateWindow(std::string title, int width, int height)
 {
 	// create window
 // returns pointer to window if successful or nullptr if failed
-	SDL_Window* window = SDL_CreateWindow(title.c_str(),
+	m_window = SDL_CreateWindow(title.c_str(),
 		SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 		width, height,
 		SDL_WINDOW_SHOWN);
-	if (window == nullptr)
+	if (m_window == nullptr)
 	{
 		cerr << "Error creating SDL window: " << SDL_GetError() << endl;
 		SDL_Quit();
@@ -36,7 +36,7 @@ bool Renderer::CreateWindow(string title, int width, int height)
 	}
 
 	// create renderer
-	m_renderer = SDL_CreateRenderer(window, -1, 0);
+	m_renderer = SDL_CreateRenderer(m_window, -1, 0);
 
 	return true;
 }

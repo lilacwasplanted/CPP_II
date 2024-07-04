@@ -1,5 +1,7 @@
 #pragma once
 #include <SDL.h>
+#include <string>
+
 class Renderer
 {
 public:
@@ -8,7 +10,7 @@ public:
 	bool Initialize();
 	void ShutDown();
 
-	bool CreateWindow(string title, int width, int heigth);
+	bool CreateWindow(std::string title, int width, int heigth);
 	void BeginFrame();
 	void EndFrame();
 
