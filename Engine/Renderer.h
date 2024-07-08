@@ -1,7 +1,7 @@
 #pragma once
 #include <SDL.h>
 #include <string>
-
+using namespace std;
 class Renderer
 {
 public:
@@ -10,7 +10,7 @@ public:
 	bool Initialize();
 	void ShutDown();
 
-	bool CreateWindow(std::string title, int width, int heigth);
+	bool CreateWindow(string title, int width, int heigth);
 	void BeginFrame();
 	void EndFrame();
 
@@ -20,6 +20,9 @@ public:
 	void DrawLine(float x1, float y1, float x2, float y2);
 	void DrawPoint(int x, int y);
 
+
+	void DrawRect(int x, int y, int w, int h);
+	void DrawRect(float x, float y, float w, float h);
 private:
 	SDL_Window* m_window;
 	SDL_Renderer* m_renderer;

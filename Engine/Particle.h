@@ -4,6 +4,7 @@
 using namespace std;
 
 struct Particle {
+public:
 	Vector2 position{0,0};
 	Vector2 velocity{0,0};
 	float lifespan = 0;
@@ -13,7 +14,13 @@ struct Particle {
 		position{ position }, 
 		velocity{ velocity } 
 	{}
+	Particle(Vector2 postion, Vector2 velocity, float m_lifespan) : 
+		position{ position }, 
+		velocity{ velocity },
+		lifespan{m_lifespan}
+	{}
 	void Update(float dt);
 	void Draw(Renderer renderer);
-
+private:
+	float m_lifespan;
 };

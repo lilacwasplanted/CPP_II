@@ -18,7 +18,7 @@ bool Input::Initialize()
 
 void Input::ShutDown()
 {
-    //
+
 }
 
 void Input::Update()
@@ -30,6 +30,7 @@ void Input::Update()
     m_prevKeyState = m_keyState;
     const uint8_t* keyboardState = SDL_GetKeyboardState(nullptr);
     copy(keyboardState, keyboardState + m_keyState.size(), m_keyState.begin());
+
 
     //mouse input
     int x, y;

@@ -1,6 +1,5 @@
 #include "E_Time.h"
 
-
 using namespace std;
 
 void Time::Tick()

@@ -20,7 +20,7 @@ void Renderer::ShutDown()
 
 }
 
-bool Renderer::CreateWindow(std::string title, int width, int height)
+bool Renderer::CreateWindow(string title, int width, int height)
 {
 	// create window
 // returns pointer to window if successful or nullptr if failed
@@ -35,7 +35,7 @@ bool Renderer::CreateWindow(std::string title, int width, int height)
 		return false;
 	}
 
-	// create renderer
+	// create renderer                                
 	m_renderer = SDL_CreateRenderer(m_window, -1, 0);
 
 	return true;
@@ -70,6 +70,18 @@ void Renderer::DrawLine(float x1, float y1, float x2, float y2)
 void Renderer::DrawPoint(int x, int y)
 {
 	SDL_RenderDrawPoint(m_renderer, x, y);
+}
+
+void Renderer::DrawRect(int x, int y, int w, int h)
+{
+	SDL_Rect rect{ x - w / 2 , y - h / 2, w, h };
+	SDL_RenderFillRect(m_renderer, &rect);
+}
+
+void Renderer::DrawRect(float x, float y, float w, float h)
+{
+	SDL_FRect rect{ x - w / 2, y - h / 2, w, h };
+	SDL_RenderFillRectF(m_renderer, &rect);
 }
 
 
