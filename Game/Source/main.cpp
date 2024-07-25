@@ -8,104 +8,133 @@
 #include "Random.h"
 #include "E_Time.h"
 #include "MathUtils.h"
-
+#include "GameData.h"
+#include "SpaceGame.h"
+#include <fmod.hpp>
 using namespace std;
 
 
 int main(int argc, char* argv[])
 {
+	g_engine.Initialize();
+	SpaceGame* game = new SpaceGame(&g_engine);
+	game->Initialize();
 
-	Math::Abs<int>(-10);
-	Math::Abs<float>(-12.0f);
-	Math::Abs<double>(-12.0);
+	g_engine.GetAudio()->AddSound("bass.wav");
+	g_engine.GetAudio()->AddSound("snare.wav");
+	g_engine.GetAudio()->AddSound("open-hat.wav");
 
-	Renderer renderer;
-	renderer.Initialize();
-	renderer.ShutDown();
-	renderer.CreateWindow("Game Engine", 800, 600);
+	while (!g_engine.IsQuit()) {
 
-	Input input;
-	input.Initialize();
+		g_engine.Update();
+		game->Update(g_engine.GetTime().GetDeltaTime());
 
-	Time time;
+		g_engine.GetRenderer().SetColor(0, 0, 0, 0);
+		g_engine.GetRenderer().BeginFrame();
 
+		game->Draw(g_engine.GetRenderer());
+
+		g_engine.GetRenderer().EndFrame();
+
+		//g_engine.GetInput()->Update();
+
+
+		
+		if (g_engine.GetInput()->GetKeyDown(SDL_SCANCODE_Q) && !g_engine.GetInput()->GetPrevKeyDown(SDL_SCANCODE_Q)) {
+			g_engine.GetAudio()->PlaySound("bass.wav");
+		}
+		if (g_engine.GetInput()->GetKeyDown(SDL_SCANCODE_W) && !g_engine.GetInput()->GetPrevKeyDown(SDL_SCANCODE_W)) {
+			g_engine.GetAudio()->PlaySound("snare.wav");
+		}
+		if (g_engine.GetInput()->GetKeyDown(SDL_SCANCODE_E) && !g_engine.GetInput()->GetPrevKeyDown(SDL_SCANCODE_E)) {
+			g_engine.GetAudio()->PlaySound("open-hat.wav");
+		}
+
+	}
+	return 0;
+}
+
+/*
+	FMOD::System* audio;
+	FMOD::System_Create(&audio);
+	void* extradiverdata = nullptr;
+	audio->init(32, FMOD_INIT_NORMAL, extradiverdata);
+
+
+	FMOD::Sound* sound = nullptr;
+	audio->createSound("test.wav", FMOD_DEFAULT, 0, &sound);
+
+	audio->playSound(sound, 0, false, nullptr);
 
 	//// Seed the random number generator
 	vector<Vector2> points;
 	vector<Particle> particles;
+float offset = 0;
 
-	//for (int i = 0; i < 0; i++)
-	//{
-	//	particles.push_back(Particle{ {rand() % 800, rand() % 800}, {randomf(100,300),0.0f} });
-	//	}
-	float offset = 0;
+	
 	bool quit = false;
-	while (!quit)
+	while (!g_engine.IsQuit())
 
 	{
-		time.Tick();
+	
 
 		//Input
-		input.Update();
-		if (input.GetKeyDown(SDL_SCANCODE_ESCAPE))
-		{
-			quit = true;
 
-		}
+		float thrust 
 
 		//Update
-		Vector2 mousePos = input.GetMousePos();
-		if (input.GetMouseButtonDown(0)) {
+		Vector2 mousePos = g_engine.GetInput()->GetMousePos();
+		if (g_engine.GetInput()->GetMouseButtonDown(0)) {
 			
-			particles.push_back(Particle{ mousePos, {randomOnUnitCircle() * randomf(100,200), randomf(-300,300)}, random() % 6 });
+			particles.push_back(Particle{mousePos, {randomOnUnitCircle() * randomf(100,200), randomf(-300,300)}, random() % 6 });
 		}
-		
+		//Update
+		scene->Update(g_engine.GetTime().GetDeltaTime())
+
 		cout << "Mouse Position: (" << mousePos.x << ", " << mousePos.y << " )" << endl;
 		
-		if (input.GetMouseButtonDown(0) && !input.GetPrevMouseButtonDown(0)){
+		if (g_engine.GetInput()->GetMouseButtonDown(0) && !input.GetPrevMouseButtonDown(0)){
 			cout << "Mouse Pressed\n";
 			points.push_back(mousePos);
 		}
-		if (input.GetMouseButtonDown(0) && input.GetPrevMouseButtonDown(0)) {
+		if (g_engine.GetInput()->GetMouseButtonDown(0) && input.GetPrevMouseButtonDown(0)) {
 			float distance = (points.back() - mousePos).Length();
 			if (distance > 5) {points.push_back(mousePos);}
 		}
 		
 		for (Particle& particle : particles) {
-			particle.Update(time.GetDeltaTime());
+			particle.Update(g_engine.GetTime());
 			if (particle.position.x > 800) particle.position.x = 0;
 			if (particle.position.x < 0) particle.position.x = 800;
 		}
 
 		// Draw
 		// clear screen
-		renderer.SetColor(0,0,0, 0);
-		renderer.BeginFrame(); // comment this out to have it draw a
+ // comment this out to have it draw a
 
-		renderer.SetColor(255, 255, 255, 0);
+		g_engine.GetRenderer()->SetColor(255, 255, 255, 0);
 		float radius = 250;
 		offset += (2 * time.GetDeltaTime());
 		for (float angle = 0; angle < 360; angle += 360 / 30) {
 			float x = Math::Cos(Math::DegToRad(angle + offset)) * Math::Sin((offset + angle) * 0.1f) * radius;
 			float y = Math::Sin(Math::DegToRad(angle + offset)) * Math::Sin((offset + angle) * 0.1f) * radius;
-			renderer.SetColor(random(256), random(256), random(256), 0);
-			renderer.DrawRect(400 + x, 300 + y, 4.0f, 4.0f);
+			g_engine.GetRenderer()->SetColor(random(256), random(256), random(256), 0);
+			g_engine.GetRenderer()->DrawRect(400 + x, 300 + y, 4.0f, 4.0f);
 		}
 
 
 
 		//draw particles
-		renderer.SetColor(rand() % 256, rand() % 256, rand() % 256, 0);
+		g_engine.GetRenderer()->SetColor(rand() % 256, rand() % 256, rand() % 256, 0);
 
 	for (Particle particle : particles) {
-		particle.Draw(renderer);
+		particle.Draw(*g_engine.GetRenderer());
 
 	}
 
-	renderer.EndFrame();
+	g_engine.GetRenderer()->EndFrame();
 	}
 
-	renderer.ShutDown();
-	SDL_Quit();
 	return 0;
 }
+*/

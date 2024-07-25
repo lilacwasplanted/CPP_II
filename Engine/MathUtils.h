@@ -9,17 +9,16 @@ namespace Math
 	constexpr float twoPi = 6.283185307179586f; // 360
 	constexpr float halfPi = 1.5707963267948966; // 90
 
-	float RadToDeg(float radians) { return radians * (180.0f / Pi); }
-	float DegToRad(float degrees) { return degrees * (Pi / 180.0f); }
+	inline float RadToDeg(float radians) { return radians * (180.0f / Pi); }
+	inline float DegToRad(float degrees) { return degrees * (Pi / 180.0f); }
 
 
-
-	float Sin(float radians) {
+	inline float Sin(float radians) {
 		return sinf(radians);
 
 	}
 
-	float Cos(float radians) {
+	inline float Cos(float radians) {
 		return cosf(radians);
 
 	}
@@ -30,20 +29,27 @@ namespace Math
 	/// <param name="a">value</param>
 	/// <param name="b">value</param>
 	/// <returns> The maximum value between a and b. </returns>
+	 
+	
 	template<typename T>
 	T Max(T a, T b) {
-		if (a > b) ? a : b;
+		return (a > b) ? a : b;
 		// ? = if : = else
 	}
 	template<typename T>
 	T Min(T a, T b) {
-		if (a < b) ? a : b;
+		return (a < b) ? a : b;
 		// ? = if : = else
 	}
 
 	template <typename T>
 	T Abs(T value) {
 		return (value < 0) ? -value : value;
+	}
+
+	template <typename T>
+	T Clamp(T value, T min, T max) {
+		return (value < min) ? min : (value > max) ? max : value;
 	}
 
 };
